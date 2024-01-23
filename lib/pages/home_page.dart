@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project005/widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.pageTitle});
+  const HomePage({super.key, required this.appBarText});
 
-  final String pageTitle;
+  final String appBarText;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
       // must have appbar to see drawer
       appBar: AppBar(
         // widget is only available in statefulw
-        title: Text(widget.pageTitle),
+        title: Text(widget.appBarText),
       ),
       drawer: const CustomDrawer(),
       body: const Center(

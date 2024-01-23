@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -7,11 +6,14 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(0)),
+        // borderRadius: BorderRadius.only(
+        //       topRight: Radius.circular(20),
+        //       bottomRight: Radius.circular(20)),
+      ),
+      // TODO: change this to ListView.builder
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
@@ -21,7 +23,7 @@ class CustomDrawer extends StatelessWidget {
             child: Text('Drawer Header'),
           ),
           ListTile(
-            title: const Text('Home'),
+            title: const Text('Option One'),
             // selected: _selectedIndex == 0,
             onTap: () {
               // Update the state of the app
@@ -31,21 +33,11 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Business'),
+            title: const Text('Option Two'),
             // selected: _selectedIndex == 1,
             onTap: () {
               // Update the state of the app
               // _onItemTapped(1);
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Text('School'),
-            // selected: _selectedIndex == 2,
-            onTap: () {
-              // Update the state of the app
-              // _onItemTapped(2);
               // Then close the drawer
               Navigator.pop(context);
             },
