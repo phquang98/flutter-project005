@@ -21,6 +21,7 @@ class MainApp extends StatelessWidget {
       // home: HomePage(appBarText: 'This is an app bar text'),
       home: DetailsExamplePage(
         imagePath: 'assets/images/vn.png',
+        exampleCountryGetUrl: 'https://restcountries.com/v3.1/name/vietnam',
       ),
     );
   }
