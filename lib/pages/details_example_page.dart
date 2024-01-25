@@ -56,9 +56,24 @@ class _DetailsExamplePageState extends State<DetailsExamplePage> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: use pushNamed here with args to see how nav works with params
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trang vi du: nuoc VN'),
+        // `leading` will have default value (https://api.flutter.dev/flutter/material/AppBar-class.html)
+        leading: SizedBox(
+          height: 50,
+          width: 50,
+          child: TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_upward,
+                color: Colors.black,
+              )),
+        ),
       ),
       body: FutureBuilder(
           future: textCountryData,
@@ -82,6 +97,14 @@ class _DetailsExamplePageState extends State<DetailsExamplePage> {
                   Row(
                     children: [
                       Text('Tên chính thức: ${snapshot.data?.officialName}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[500])),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Dân số: ${snapshot.data?.population}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.grey[500])),
