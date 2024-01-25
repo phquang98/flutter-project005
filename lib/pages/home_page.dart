@@ -15,6 +15,21 @@ class HomePage extends StatefulWidget {
 
 // TODO: add search box in this page, to show later how to filter and reponse live, and search box are used only here atm
 class _HomePageState extends State<HomePage> {
+  // TODO: change this to fetching data instead
+  final fakeDataCommonName = ['United Kingdom', 'France', 'Viet Nam'];
+  final fakeDataOfficialName = [
+    'United Kingdom of Great Britain and Northern Ireland',
+    'French Republic',
+    'Socialist Republic of Vietnam'
+  ];
+  final fakeDataArea = [242900, 551695, 331212];
+  final fakeDataPop = [67215293, 67391582, 97338583];
+  final fakeDataFlagUrls = [
+    'https://flagcdn.com/w320/gb.png',
+    'https://flagcdn.com/w320/fr.png',
+    'https://flagcdn.com/w320/vn.png'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,12 +48,13 @@ class _HomePageState extends State<HomePage> {
           scrollDirection: Axis.vertical,
           itemCount: 3,
           itemBuilder: (context, index) {
-            return const HorizontalCard(
-                commonName: 'Viet Nam',
-                officialName: 'CHXHCN Viet Nam',
-                area: 1234,
-                flagSymbol: '🇻🇳',
-                population: 7890);
+            return HorizontalCard(
+              commonName: fakeDataCommonName[index],
+              officialName: fakeDataOfficialName[index],
+              area: fakeDataArea[index],
+              population: fakeDataPop[index],
+              flagUrl: fakeDataFlagUrls[index],
+            );
           },
         ),
       ),
