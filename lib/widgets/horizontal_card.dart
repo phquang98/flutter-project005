@@ -28,8 +28,10 @@ class HorizontalCard extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
             onTap: () {
-              log('ne');
-              Navigator.of(context).pushNamed('/test_details_example');
+              Navigator.of(context).pushNamed(
+                '/test_details_example',
+                arguments: {'accountName': 'Johnny', 'userId': '6969'},
+              );
             },
             child: Container(
               padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),

@@ -56,7 +56,16 @@ class _DetailsExamplePageState extends State<DetailsExamplePage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: use pushNamed here with args to see how nav works with params
+    // access data passed from Navigation (check null before casting)
+    final nullableParams = ModalRoute.of(context)?.settings.arguments;
+
+    if (nullableParams != null) {
+      // if data existed, try casting to Map for later usage
+      var mappedParams = nullableParams as Map<String, String>;
+      log('Data passed from nav: { accountName: ${mappedParams['accountName']}, userId: ${mappedParams['userId']} }');
+    } else {
+      log('that bai');
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -75,49 +84,54 @@ class _DetailsExamplePageState extends State<DetailsExamplePage> {
               )),
         ),
       ),
-      body: FutureBuilder(
-          future: textCountryData,
-          builder: ((context, snapshot) {
-            // if async ops completes and server returns sth
-            if (snapshot.hasData) {
-              // snapshot.data still can be nullable as what if server returns null (e.g. find a non-existed record)
-              return Column(
-                children: [
-                  Row(
-                    children: [
-                      Text('Nước ${snapshot.data?.commonName}',
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Image.asset(widget.imagePath, fit: BoxFit.cover)
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('Tên chính thức: ${snapshot.data?.officialName}',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[500])),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('Dân số: ${snapshot.data?.population}',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[500])),
-                    ],
-                  ),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
+      // recommended start wrapping a Container in all pages -> give consistence padding
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: FutureBuilder(
+            future: textCountryData,
+            builder: ((context, snapshot) {
+              // if async ops completes and server returns sth
+              if (snapshot.hasData) {
+                // snapshot.data still can be nullable as what if server returns null (e.g. find a non-existed record)
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text('Nước ${snapshot.data?.commonName}',
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Image.asset(widget.imagePath, fit: BoxFit.cover)
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Tên chính thức: ${snapshot.data?.officialName}',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[500])),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Dân số: ${snapshot.data?.population}',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[500])),
+                      ],
+                    ),
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
 
-            return const CircularProgressIndicator();
-          })),
+              return const CircularProgressIndicator();
+            })),
+      ),
     );
   }
 }
