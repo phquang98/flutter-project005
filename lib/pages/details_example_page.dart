@@ -27,23 +27,37 @@ class _DetailsExamplePageState extends State<DetailsExamplePage> {
   Future<SlimCountry> fetchExampleCountry() async {
     // 1. Fetch and return Res obj
     final response = await http.get(Uri.parse(widget.exampleCountryGetUrl));
-    log('Status code: ${response.statusCode} | Response: ${response.body}');
+    // log('Status code: ${response.statusCode}');
+    log('Response: ${response.body}');
+
     // 2. Control flow accordingly
-    if (response.statusCode == 200) {
-      log('Request success.');
-      // 3. Decode JSON to built-in Dart type (List, as API commnly returns an arr)
-      List<dynamic> tmpList = jsonDecode(response.body);
-      // 4. Use class mets for casting
-      var data = SlimCountry.fromJson(tmpList.firstWhere((element) {
-        // NOTE: cant type-check element, improve this ?
-        return element['name']['common'] == 'Vietnam';
-      }));
-      log('Data as a List<dynamic>: ${tmpList.toString()}');
-      log('Data as a class: ${data.commonName}');
-      return data;
-    } else {
-      log('Request failed.');
-      throw Exception('Failed to load data');
+    try {
+      if (response.statusCode == 200) {
+        // log('Request success.');
+        // 3. Decode JSON to built-in Dart type (List, as API commnly returns an arr)
+        List<dynamic> tmpList = jsonDecode(response.body);
+
+        // 4. Use class mets for casting
+        // if endpoint returns [record]
+        // final dataInOne =
+        //     SlimCountry.fromJson(tmpList.first as Map<String, dynamic>);
+        // if endpoint returns [record1, record2, ...]
+        final dataInMany = SlimCountry.fromJson(tmpList.firstWhere((element) {
+          // NOTE: cant type-check element, improve this ?
+          return element['name']['common'] == 'Vietnam';
+        }) as Map<String, dynamic>);
+
+        // Simulating a parsing err -> catch
+        // final jsonData = jsonDecode('Non-JSON Response');
+
+        // return dataInOne;
+        return dataInMany;
+      } else {
+        throw Exception('Status code is not 200!');
+      }
+    } catch (err) {
+      log('Exception: $err');
+      throw Exception('Something wrong!');
     }
   }
 
@@ -69,7 +83,7 @@ class _DetailsExamplePageState extends State<DetailsExamplePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trang vi du: nuoc VN'),
+        title: const Text('Simple Example Widget'),
         // `leading` will have default value (https://api.flutter.dev/flutter/material/AppBar-class.html)
         leading: SizedBox(
           height: 50,

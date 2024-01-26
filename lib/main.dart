@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_project005/widgets/drawer.dart';
-import 'package:flutter_project005/pages/home_page.dart';
 import 'package:flutter_project005/widgets/horizontal_card.dart';
+import 'package:flutter_project005/pages/home_page.dart';
+import 'package:flutter_project005/pages/details_page.dart';
 import 'package:flutter_project005/pages/details_example_page.dart';
 
 void main() {
@@ -45,7 +46,7 @@ class MainApp extends StatelessWidget {
                 imagePath: 'assets/images/vn.png',
                 exampleCountryGetUrl:
                     'https://restcountries.com/v3.1/name/vietnam');
-          }
+          },
         });
   }
 }

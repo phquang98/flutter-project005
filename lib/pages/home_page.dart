@@ -14,7 +14,12 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-// TODO: add search box in this page, to show later how to filter and reponse live, and search box are used only here atm
+//  TODO:
+//  - add search bar
+//  - add logic to filter data based on input
+//    - add state between page and widgets
+//    - find how to transfer state from pages -> widgets
+//    - write actions to rerender each time searchbar value(?) changed
 class _HomePageState extends State<HomePage> {
   // TODO: change this to fetching data instead
   final fakeDataCommonName = ['United Kingdom', 'France', 'Viet Nam'];

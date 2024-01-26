@@ -1,6 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
+
+import 'package:flutter_project005/pages/details_page.dart';
 
 class HorizontalCard extends StatelessWidget {
   const HorizontalCard({
@@ -24,10 +25,24 @@ class HorizontalCard extends StatelessWidget {
       child: Card(
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              '/test_details_example',
-              arguments: {'accountName': 'Johnny', 'userId': '6969'},
+          // TODO: move this to parent ?
+          // use async to perform actions after done naving
+          onTap: () async {
+            // 1. use simple example to understand nav first
+            // await Navigator.of(context).pushNamed(
+            //   '/test_details_example',
+            //   arguments: {'accountName': 'Johnny', 'userId': '6969'},
+            // );
+            // // simulate actions
+            // log('Received result from SecondScreen:');
+
+            // 2. then uncomment this
+            // TODO: fix this
+            final fullUrl = 'https://restcountries.com/v3.1/name/$commonName';
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      DetailsPage(commonName: commonName, countryUrl: fullUrl)),
             );
           },
           child: Container(

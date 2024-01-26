@@ -17,3 +17,4 @@ Learn:
   - <https://api.flutter.dev/flutter/material/showDialog.html>
 
 - wtf is a widget controller
+- check wtf is mounted, why need to check it and how to check it
