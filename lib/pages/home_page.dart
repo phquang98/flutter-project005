@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_project005/widgets/drawer.dart';
+import 'package:flutter_project005/widgets/search_bar.dart';
 import 'package:flutter_project005/widgets/horizontal_card.dart';
 import 'package:flutter_project005/pages/details_example_page.dart';
 
@@ -41,38 +42,38 @@ class _HomePageState extends State<HomePage> {
       drawer: const CustomDrawer(),
       // recommended start wrapping a Container in all pages -> give consistence padding
       body: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return HorizontalCard(
-              commonName: fakeDataCommonName[index],
-              officialName: fakeDataOfficialName[index],
-              area: fakeDataArea[index],
-              population: fakeDataPop[index],
-              flagUrl: fakeDataFlagUrls[index],
-            );
-          },
-        ),
-      ),
-      // body: Center(
-      //     child: ElevatedButton(
-      //   child: const Text('Xem VN'),
-      //   onPressed: () {
-      //     // 2 ways for navigating
-      //     // - Navigator.of(context).push() if widget ctx is being exposed (aka here, inside Widget build(BuildContext context))
-      //     // - Navigator.push() if handle nav logic outside widget
-      //     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      //       return const DetailsExamplePage(
-      //           imagePath: 'assets/images/vn.png',
-      //           exampleCountryGetUrl:
-      //               'https://restcountries.com/v3.1/name/vietnam');
-      //     }));
-      //   },
-      // )),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.only(bottom: 16),
+                color: Colors.blue,
+                child: const CustomSearchBar(),
+              ),
+              Expanded(
+                  // ListView must be under Expanded https://stackoverflow.com/a/57335217
+                  child: Container(
+                color: Colors.yellow,
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return HorizontalCard(
+                      commonName: fakeDataCommonName[index],
+                      officialName: fakeDataOfficialName[index],
+                      area: fakeDataArea[index],
+                      population: fakeDataPop[index],
+                      flagUrl: fakeDataFlagUrls[index],
+                    );
+                  },
+                ),
+              ))
+            ],
+          )),
     );
   }
 }

@@ -49,6 +49,7 @@ class HorizontalCard extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
+                    // Expanded must be under Row or Column
                     children: [
                       Expanded(
                           child: Text(
