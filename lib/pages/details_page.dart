@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:flutter_project005/widgets/drawer.dart';
 import 'package:flutter_project005/models/slim_country.dart';
+import 'package:flutter_project005/widgets/vertical_card.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage(
@@ -47,7 +48,7 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.commonName),
+        title: Text('Details Page - ${widget.commonName}'),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(
@@ -58,11 +59,27 @@ class _DetailsPageState extends State<DetailsPage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${snapshot.data?.commonName}'),
-                  Text('${snapshot.data?.officialName}'),
-                  Text('${snapshot.data?.population}'),
-                  Text('${snapshot.data?.flagPng}'),
+                  Expanded(
+                    flex: 2,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: VerticalCard(
+                        commonName: snapshot.data?.commonName ?? 'Loading',
+                        officialName: snapshot.data?.officialName ?? 'Loading',
+                        population: snapshot.data?.population ?? 0,
+                        flagUrl: snapshot.data?.flagUrl ?? 'Loading',
+                        independent: snapshot.data?.independent ?? false,
+                        status: snapshot.data?.status ?? 'Loading',
+                        capitalName: snapshot.data?.capitalName ?? 'Loading',
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  )
                 ],
               );
             } else if (snapshot.hasError) {

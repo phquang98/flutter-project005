@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       // must have appbar to see drawer
       appBar: AppBar(
         // widget is only available in statefulw
-        title: Text(widget.appBarText),
+        title: Text('Home Page - ${widget.appBarText}'),
       ),
       drawer: const CustomDrawer(),
       // recommended start wrapping a Container in all pages -> give consistence padding
