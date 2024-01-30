@@ -62,7 +62,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: VerticalCard(
@@ -73,6 +73,9 @@ class _DetailsPageState extends State<DetailsPage> {
                         independent: snapshot.data?.independent ?? false,
                         status: snapshot.data?.status ?? 'Loading',
                         capitalName: snapshot.data?.capitalName ?? 'Loading',
+                        subregion: snapshot.data?.subregion ?? 'Loading',
+                        area: snapshot.data?.area ?? 0,
+                        currencyName: snapshot.data?.currencyName ?? 'Loading',
                       ),
                     ),
                   ),

@@ -1,4 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_project005/models/slim_country.dart';
 
 // TODO: wrap all this shit under a class param instead
@@ -12,6 +14,9 @@ class VerticalCard extends StatelessWidget {
     required this.independent,
     required this.status,
     required this.capitalName,
+    required this.subregion,
+    required this.area,
+    required this.currencyName,
     // required this.countryRecord,
   });
 
@@ -22,6 +27,10 @@ class VerticalCard extends StatelessWidget {
   final bool independent;
   final String status;
   final String capitalName;
+  // TODO:
+  final String subregion;
+  final int area;
+  final String currencyName;
 
   // final SlimCountry countryRecord;
 
@@ -84,20 +93,68 @@ class VerticalCard extends StatelessWidget {
           ),
 
           // Second Row
-          // TODO: how to wrap the whole image to the card
-          Expanded(
-            // child: Container(
-            //   decoration: const BoxDecoration(
-            //     color: Colors.cyan,
-            //   ),
-            // ),
-            child: Image.network(
-              flagUrl,
-              fit: BoxFit.fill,
-            ),
+          Image.network(
+            flagUrl,
+            // NOTE: must be same as parent card (vertical card width in details page)
+            width: MediaQuery.of(context).size.width * 0.4,
+            fit: BoxFit.fill,
           ),
 
           // Third Row - duplicate
+          Container(
+            margin: const EdgeInsets.fromLTRB(8, 32, 8, 0),
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.black,
+            //     width: 1,
+            //   ),
+            // ),
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                        child: const Text(
+                          'Area',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        // area.toString(),
+                        '${NumberFormat.decimalPattern('vi_VN').format(area)} square km',
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                        child: const Text(
+                          'Population',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Text(
+                          '${NumberFormat.compact().format(population / 1000000)} million people'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Fourth Row - duplicate
           Container(
             margin: const EdgeInsets.fromLTRB(8, 32, 8, 0),
             // decoration: BoxDecoration(
@@ -135,14 +192,14 @@ class VerticalCard extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                         child: const Text(
-                          'Population',
+                          'Region',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       Text(
-                        population.toString(),
+                        subregion,
                       ),
                     ],
                   ),
