@@ -7,12 +7,9 @@ class SlimCountry {
   final bool independent;
   final String status;
   final String capitalName;
-  // TODO: viet not subregion va area vao day
   final String subregion;
-  final int area;
-  // TODO: cast the nao de loi ra duoc cai currencies
+  final double area; // sometimes use precise area -> double
   final String currencyName;
-  // final String currencySymbol;
 
   // https://dart.dev/language/constructors#super-parameters
   const SlimCountry({
@@ -28,30 +25,43 @@ class SlimCountry {
     required this.area,
     // TODO:
     required this.currencyName,
-    // required this.currencySymbol,
   });
 
   // TODO: implement toJson (and maybe fromMap, toMap ?)
 
   // NOTE: make sure to doublecheck prop name from BE correctly
+  // use nullish coalescing ?? if not accessing 1 nested
+  // use tenary ops ? : when > 1 nested
   factory SlimCountry.fromJson(Map<String, dynamic> rawJsonData) {
     return SlimCountry(
       commonName: rawJsonData['name']['common'],
       officialName: rawJsonData['name']['official'],
       population: rawJsonData['population'],
       flagUrl: rawJsonData['flags']['png'],
-      independent: rawJsonData['independent'],
+      independent: rawJsonData['independent'] ??
+          false, // some don't have this (e.g. Kosovo)
       status: rawJsonData['status'],
-      capitalName: rawJsonData['capital'][0],
-      subregion: rawJsonData['subregion'],
+      capitalName: (rawJsonData['capital'] != null &&
+              rawJsonData['capital'][0] != null)
+          ? rawJsonData['capital'][0]
+          : 'No Info', // some don't have (e.g. Antarctica) + avoid runtime err if not existed
+      subregion: rawJsonData['subregion'] ??
+          rawJsonData['region'], // some only have regions
       area: rawJsonData['area'],
       // (rawJsonData['currencies'] as Map<String, dynamic>).keys.first === 'VND' | 'GBP' | 'EUR' | 'AUD' (based on each details card)
-      currencyName: rawJsonData['currencies']
-              [(rawJsonData['currencies'] as Map<String, dynamic>).keys.first]
-          ['name'],
-      // currencySymbol: rawJsonData['currencies']
-      //         [(rawJsonData['currencies'] as Map<String, dynamic>).keys.first]
-      //     ['symbol'],
+      // then wrap rawJsonData['currencies'][(rawJsonData['currencies'] as Map<String, dynamic>).keys.first] as A
+      // finally currencyName: (A check not null) ? A : 'no data'
+      currencyName: (rawJsonData['currencies'] != null &&
+              rawJsonData['currencies'][
+                      (rawJsonData['currencies'] as Map<String, dynamic>)
+                          .keys
+                          .first] !=
+                  null)
+          ? rawJsonData['currencies'][
+              (rawJsonData['currencies'] as Map<String, dynamic>)
+                  .keys
+                  .first]['name']
+          : 'No Info',
     );
   }
 }

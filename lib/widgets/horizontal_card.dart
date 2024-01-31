@@ -6,6 +6,7 @@ import 'package:flutter_project005/pages/details_page.dart';
 class HorizontalCard extends StatelessWidget {
   const HorizontalCard({
     super.key,
+    required this.id,
     required this.commonName,
     required this.officialName,
     required this.area,
@@ -13,9 +14,10 @@ class HorizontalCard extends StatelessWidget {
     required this.flagUrl,
   });
 
+  final int id;
   final String commonName;
   final String officialName;
-  final int area;
+  final double area;
   final int population;
   final String flagUrl;
 
@@ -54,7 +56,7 @@ class HorizontalCard extends StatelessWidget {
                   leading: Image.network(
                     flagUrl,
                   ),
-                  title: Text(commonName),
+                  title: Text('ID $id - $commonName'),
                   subtitle: Text(officialName),
                   // onTap: () {
                   //   log('ListTile have default ink splash effect when have onTap!');

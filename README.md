@@ -18,3 +18,4 @@ Learn:
 
 - wtf is a widget controller
 - check wtf is mounted, why need to check it and how to check it
+- write a btn that create a popup as a form, click Send -> wrap everything as an Dart object -> toJson -> send to network

@@ -26,8 +26,12 @@ class _DetailsPageState extends State<DetailsPage> {
     try {
       if (response.statusCode == 200) {
         List<dynamic> tmpList = jsonDecode(response.body);
-        final data =
-            SlimCountry.fromJson(tmpList.first as Map<String, dynamic>);
+        // https://restcountries.com/v3.1/name/mali -> firstWhere, not first
+        final data = SlimCountry.fromJson(tmpList.firstWhere((ele) {
+          // add another null check to not accessing undefined
+          return (ele['name'] != null &&
+              ele['name']['common'] == widget.commonName);
+        }) as Map<String, dynamic>);
         return data;
       } else {
         throw Exception('Status code is not 200!');

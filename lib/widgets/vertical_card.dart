@@ -29,7 +29,7 @@ class VerticalCard extends StatelessWidget {
   final String capitalName;
   // TODO:
   final String subregion;
-  final int area;
+  final double area;
   final String currencyName;
 
   // final SlimCountry countryRecord;
