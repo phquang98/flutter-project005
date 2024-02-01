@@ -20,18 +20,16 @@ class SlimCountry {
     required this.independent,
     required this.status,
     required this.capitalName,
-    // TODO:
     required this.subregion,
     required this.area,
-    // TODO:
     required this.currencyName,
   });
 
-  // TODO: implement toJson (and maybe fromMap, toMap ?)
+  // TODO: implement toJson (fromMap, toMap not needed atm)
 
   // NOTE: make sure to doublecheck prop name from BE correctly
-  // use nullish coalescing ?? if not accessing 1 nested
-  // use tenary ops ? : when > 1 nested
+  // use nullish coalescing ?? when 1 nested obj/arr
+  // use tenary ops ? : when > 1 nested obj/arr
   factory SlimCountry.fromJson(Map<String, dynamic> rawJsonData) {
     return SlimCountry(
       commonName: rawJsonData['name']['common'],

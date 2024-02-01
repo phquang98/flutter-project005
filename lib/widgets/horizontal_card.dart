@@ -38,7 +38,7 @@ class HorizontalCard extends StatelessWidget {
             // // simulate actions
             // log('Received result from SecondScreen:');
 
-            // 2. then uncomment this
+            // 2. then use this
             // TODO: fix this
             final fullUrl = 'https://restcountries.com/v3.1/name/$commonName';
             await Navigator.of(context).push(

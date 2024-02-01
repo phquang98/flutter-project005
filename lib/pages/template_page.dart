@@ -23,7 +23,13 @@ class TemplatePageState extends State<TemplatePage> {
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
           ),
-          child: const Column(),
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: Container()),
+            ],
+          ),
         ));
   }
 }

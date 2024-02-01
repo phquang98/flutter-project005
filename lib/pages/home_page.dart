@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                   // ListView must be under Expanded https://stackoverflow.com/a/57335217
                   child: Container(
                       color: Colors.yellow,
-                      // TODO: giai thich type arg
+                      // NOTE: add type arg (even though it can be infer from FutureBuilder.future)
                       child: FutureBuilder<List<SlimCountry>>(
                         future: dataFromFetchedBackend,
                         builder: (content, snapshot) {
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                             return ListView.builder(
                               scrollDirection: Axis.vertical,
                               itemCount: 10,
-                              // NOTE: notice the null aw
+                              // NOTE: notice the null aware ops
                               itemBuilder: (context, index) {
                                 return HorizontalCard(
                                   id: index,

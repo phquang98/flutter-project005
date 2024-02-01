@@ -12,7 +12,7 @@ class CustomDrawer extends StatelessWidget {
         //       topRight: Radius.circular(20),
         //       bottomRight: Radius.circular(20)),
       ),
-      // TODO: change this to ListView.builder
+      // NOTE: little children -> default constructor https://api.flutter.dev/flutter/widgets/ListView-class.html
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
