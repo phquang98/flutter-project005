@@ -1,43 +1,27 @@
+import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_project005/models/slim_country.dart';
 
-// TODO: wrap all this shit under a class param instead
 class VerticalCard extends StatelessWidget {
   const VerticalCard({
     super.key,
-    required this.commonName,
-    required this.officialName,
-    required this.population,
-    required this.flagUrl,
-    required this.independent,
-    required this.status,
-    required this.capitalName,
-    required this.subregion,
-    required this.area,
-    required this.currencyName,
-    // required this.countryRecord,
+    required this.countryRecord,
   });
 
-  final String commonName;
-  final String officialName;
-  final int population;
-  final String flagUrl;
-  final bool independent;
-  final String status;
-  final String capitalName;
-  // TODO:
-  final String subregion;
-  final double area;
-  final String currencyName;
-
-  // final SlimCountry countryRecord;
+  // TODO: how to make it private for later promotion https://dart.dev/tools/non-promotion-reasons#private
+  // NOTE: currently handle null checking in child widget
+  final SlimCountry? countryRecord;
 
   // Based on MD3 https://m3.material.io/components/cards/guidelines
   // Visual reference https://www.figma.com/file/1FJV3E5vygWE2ojJWccaVm/Material-3-Design-Kit-(Community)?type=design&node-id=52346-27569&mode=design&t=EybvKvppQe6tzv1Y-0
   @override
   Widget build(BuildContext context) {
+    if (countryRecord != null) {
+      log('data ne ${countryRecord?.commonName} ${countryRecord?.officialName}');
+    }
+
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +59,7 @@ class VerticalCard extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                   child: Text(
-                    commonName,
+                    countryRecord?.commonName ?? 'No Data',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -83,7 +67,7 @@ class VerticalCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  officialName,
+                  countryRecord?.officialName ?? 'No Data',
                   style: TextStyle(
                     color: Colors.grey[500],
                   ),
@@ -94,7 +78,7 @@ class VerticalCard extends StatelessWidget {
 
           // Second Row
           Image.network(
-            flagUrl,
+            countryRecord?.flagUrl ?? 'https://flagcdn.com/w320/un.png',
             // NOTE: must be same as parent card (vertical card width in details page)
             width: MediaQuery.of(context).size.width * 0.4,
             fit: BoxFit.fill,
@@ -110,7 +94,6 @@ class VerticalCard extends StatelessWidget {
             //   ),
             // ),
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Column(
@@ -126,8 +109,7 @@ class VerticalCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        // area.toString(),
-                        '${NumberFormat.decimalPattern('vi_VN').format(area)} square km',
+                        '${NumberFormat.decimalPattern('vi_VN').format(countryRecord?.area ?? 0)} square km',
                       ),
                     ],
                   ),
@@ -146,7 +128,7 @@ class VerticalCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                          '${NumberFormat.compact().format(population / 1000000)} million people'),
+                          '${NumberFormat.compact().format(countryRecord?.population ?? 0 / 1000000)} million people'),
                     ],
                   ),
                 ),
@@ -164,7 +146,6 @@ class VerticalCard extends StatelessWidget {
             //   ),
             // ),
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Column(
@@ -180,7 +161,7 @@ class VerticalCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        capitalName,
+                        countryRecord?.capitalName ?? 'No Data',
                       ),
                     ],
                   ),
@@ -199,7 +180,7 @@ class VerticalCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        subregion,
+                        countryRecord?.subregion ?? 'No Data',
                       ),
                     ],
                   ),
@@ -234,7 +215,7 @@ class VerticalCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${status[0].toUpperCase()}${status.substring(1, status.length)}',
+                        '${countryRecord?.status[0].toUpperCase()}${countryRecord?.status.substring(1, countryRecord?.status.length)}',
                       ),
                     ],
                   ),
@@ -253,7 +234,7 @@ class VerticalCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        independent ? 'Yes' : 'No',
+                        countryRecord?.independent != null ? 'Yes' : 'No',
                       ),
                     ],
                   ),

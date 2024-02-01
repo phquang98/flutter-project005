@@ -110,40 +110,37 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                   // ListView must be under Expanded https://stackoverflow.com/a/57335217
                   child: Container(
-                      color: Colors.yellow,
+                      // color: Colors.yellow,
                       // NOTE: add type arg (even though it can be infer from FutureBuilder.future)
                       child: FutureBuilder<List<SlimCountry>>(
-                        future: dataFromFetchedBackend,
-                        builder: (content, snapshot) {
-                          if (snapshot.hasData) {
-                            log('chan ly la day ${snapshot.data.toString()}');
-                            return ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              itemCount: 10,
-                              // NOTE: notice the null aware ops
-                              itemBuilder: (context, index) {
-                                return HorizontalCard(
-                                  id: index,
-                                  commonName:
-                                      snapshot.data?[index].commonName ??
-                                          'Loading',
-                                  officialName:
-                                      snapshot.data?[index].officialName ??
-                                          'Loading',
-                                  area: snapshot.data?[index].area ?? 0,
-                                  population:
-                                      snapshot.data?[index].population ?? 0,
-                                  flagUrl: snapshot.data?[index].flagUrl ?? '',
-                                );
-                              },
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          }
+                future: dataFromFetchedBackend,
+                builder: (content, snapshot) {
+                  if (snapshot.hasData) {
+                    log('chan ly la day ${snapshot.data.toString()}');
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: 10,
+                      // NOTE: notice the null aware ops
+                      itemBuilder: (context, index) {
+                        return HorizontalCard(
+                          id: index,
+                          commonName:
+                              snapshot.data?[index].commonName ?? 'Loading',
+                          officialName:
+                              snapshot.data?[index].officialName ?? 'Loading',
+                          area: snapshot.data?[index].area ?? 0,
+                          population: snapshot.data?[index].population ?? 0,
+                          flagUrl: snapshot.data?[index].flagUrl ?? '',
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
 
-                          return const CircularProgressIndicator();
-                        },
-                      )))
+                  return const CircularProgressIndicator();
+                },
+              )))
             ],
           )),
     );

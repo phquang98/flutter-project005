@@ -58,7 +58,7 @@ class _DetailsPageState extends State<DetailsPage> {
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
         ),
-        child: FutureBuilder(
+        child: FutureBuilder<SlimCountry>(
           future: countryData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -70,16 +70,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: VerticalCard(
-                        commonName: snapshot.data?.commonName ?? 'Loading',
-                        officialName: snapshot.data?.officialName ?? 'Loading',
-                        population: snapshot.data?.population ?? 0,
-                        flagUrl: snapshot.data?.flagUrl ?? 'Loading',
-                        independent: snapshot.data?.independent ?? false,
-                        status: snapshot.data?.status ?? 'Loading',
-                        capitalName: snapshot.data?.capitalName ?? 'Loading',
-                        subregion: snapshot.data?.subregion ?? 'Loading',
-                        area: snapshot.data?.area ?? 0,
-                        currencyName: snapshot.data?.currencyName ?? 'Loading',
+                        countryRecord: snapshot.data,
                       ),
                     ),
                   ),
