@@ -7,7 +7,6 @@ import 'package:flutter_project005/widgets/drawer.dart';
 import 'package:flutter_project005/widgets/search_bar.dart';
 import 'package:flutter_project005/models/slim_country.dart';
 import 'package:flutter_project005/widgets/horizontal_card.dart';
-import 'package:flutter_project005/pages/details_example_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.appBarText});
@@ -18,19 +17,12 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-//  TODO:
-//  - add search bar
-//  - add logic to filter data based on input
-//    - add state between page and widgets
-//    - find how to transfer state from pages -> widgets
-//    - write actions to rerender each time searchbar value(?) changed
 class _HomePageState extends State<HomePage> {
   // use this to hold data from backend
   late Future<List<SlimCountry>> dataFromFetchedBackend;
-  // TODO: implement search
-  // use this to hold data for render instead
-  late List<SlimCountry> renderedData = [];
-  late String searchPhrase;
+  late String searchPhrase = '';
+
+  // === Handlers ===
 
   // for debugging
   // Future<dynamic> fetchCacDebugNgu() async {
@@ -77,6 +69,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void mutateDataFromSearchPhrase(String searchPhraseHere) {
+    setState(() {
+      searchPhrase = searchPhraseHere;
+    });
+  }
+
+  // === END Handlers ===
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +86,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    log('Rerendered!');
+
     return Scaffold(
       // must have appbar to see drawer
       appBar: AppBar(
@@ -105,7 +107,9 @@ class _HomePageState extends State<HomePage> {
                 margin: const EdgeInsets.only(bottom: 16),
                 padding: const EdgeInsets.only(bottom: 16),
                 // color: Colors.blue,
-                child: const CustomSearchBar(),
+                child: CustomSearchBar(
+                  onChangeHandler: mutateDataFromSearchPhrase,
+                ),
               ),
               Expanded(
                   // ListView must be under Expanded https://stackoverflow.com/a/57335217
@@ -115,22 +119,36 @@ class _HomePageState extends State<HomePage> {
                       child: FutureBuilder<List<SlimCountry>>(
                 future: dataFromFetchedBackend,
                 builder: (content, snapshot) {
+                  // NOTE:
                   if (snapshot.hasData) {
-                    log('chan ly la day ${snapshot.data.toString()}');
+                    final shownData = snapshot.data?.where(
+                      (ele) {
+                        if (searchPhrase == '') {
+                          return true;
+                        } else {
+                          return ele.commonName
+                              .toLowerCase()
+                              .contains(searchPhrase.toLowerCase());
+                        }
+                      },
+                    ).toList();
+
+                    // log('Redraw! With searchPhrase=$searchPhrase');
+                    // log('Redraw! With shownData=${shownData?.length}');
+
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: 10,
+                      itemCount: shownData?.length,
                       // NOTE: notice the null aware ops
                       itemBuilder: (context, index) {
                         return HorizontalCard(
                           id: index,
-                          commonName:
-                              snapshot.data?[index].commonName ?? 'Loading',
+                          commonName: shownData?[index].commonName ?? 'Loading',
                           officialName:
-                              snapshot.data?[index].officialName ?? 'Loading',
-                          area: snapshot.data?[index].area ?? 0,
-                          population: snapshot.data?[index].population ?? 0,
-                          flagUrl: snapshot.data?[index].flagUrl ?? '',
+                              shownData?[index].officialName ?? 'Loading',
+                          area: shownData?[index].area ?? 0,
+                          population: shownData?[index].population ?? 0,
+                          flagUrl: shownData?[index].flagUrl ?? '',
                         );
                       },
                     );

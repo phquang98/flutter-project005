@@ -1,8 +1,14 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 
 // TODO: create another search bar based on Huy's code `_searchBarKHANG` and see the diff
 class CustomSearchBar extends StatefulWidget {
-  const CustomSearchBar({super.key});
+  const CustomSearchBar({
+    super.key,
+    required this.onChangeHandler,
+  });
+
+  final void Function(String) onChangeHandler;
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
@@ -15,6 +21,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         builder: (BuildContext context, SearchController ctrler) {
       return SearchBar(
         controller: ctrler,
+        onChanged: (value) {
+          // log('log value $value');
+          widget.onChangeHandler(value);
+        },
         onTap: () {
           // disable the auto-complete list in suggestionBuilder
           // ctrler.openView();
