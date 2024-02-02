@@ -78,7 +78,7 @@ class _DetailsExamplePageState extends State<DetailsExamplePage> {
       var mappedParams = nullableParams as Map<String, String>;
       log('Data passed from nav: { accountName: ${mappedParams['accountName']}, userId: ${mappedParams['userId']} }');
     } else {
-      log('that bai');
+      log('No data passed down when navigating...');
     }
 
     return Scaffold(

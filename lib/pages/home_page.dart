@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage> {
                       child: FutureBuilder<List<SlimCountry>>(
                 future: dataFromFetchedBackend,
                 builder: (content, snapshot) {
-                  // NOTE:
                   if (snapshot.hasData) {
                     final shownData = snapshot.data?.where(
                       (ele) {

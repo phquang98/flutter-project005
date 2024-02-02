@@ -1,4 +1,8 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_project005/pages/details_page.dart';
+import 'package:flutter_project005/pages/details_example_page.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -8,7 +12,7 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(0)),
-        // borderRadius: BorderRadius.only(
+        // OR borderRadius: BorderRadius.only(
         //       topRight: Radius.circular(20),
         //       bottomRight: Radius.circular(20)),
       ),
@@ -23,13 +27,23 @@ class CustomDrawer extends StatelessWidget {
             child: Text('Drawer Header'),
           ),
           ListTile(
-            title: const Text('Option One'),
-            // selected: _selectedIndex == 0,
+            title: const Text('Example - Navigating to static page'),
             onTap: () {
-              // Update the state of the app
-              // _onItemTapped(0);
-              // Then close the drawer
+              // close the drawer first
               Navigator.pop(context);
+
+              // then navigate to the desired screen
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return const DetailsExamplePage(
+                      imagePath: 'assets/images/vn.png',
+                      exampleCountryGetUrl:
+                          'https://restcountries.com/v3.1/name/vietnam');
+                }),
+              );
+
+              // TODO: need citation
+              // NOTE: this is statelessw -> no need to perform Navigator async AND/OR check mounted
             },
           ),
           ListTile(

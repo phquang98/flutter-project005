@@ -19,3 +19,8 @@ Learn:
 - wtf is a widget controller
 - check wtf is mounted, why need to check it and how to check it
 - write a btn that create a popup as a form, click Send -> wrap everything as an Dart object -> toJson -> send to network
+
+- TODO: search by creating a new tab to search by languages
+- TODO: how can i get data that what pages user just visited from using drawer
+  - <https://docs.flutter.dev/cookbook/navigation/returning-data>
+  - <https://dart.dev/tools/linter-rules/use_build_context_synchronously>
