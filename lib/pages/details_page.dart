@@ -41,6 +41,36 @@ class _DetailsPageState extends State<DetailsPage> {
     }
   }
 
+  // Navigator
+  // - initialized using a func like this (do explicit type arg, Dart type inference not as strong as TS)
+  // - use Nav.pop()
+  // - passed down to caller with async/await
+  // - remember to handle null (user cancels the dialog (e.g. by hitting the back button on Android, or tapping on the mask behind the dialog))
+  Future<int?> _dialogBuilder(BuildContext fncCtx) async {
+    return await showDialog<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Basic dialog box.'),
+            content: const Text('good'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  return Navigator.pop(fncCtx, 1);
+                },
+                child: const Text('Disabled'),
+              ),
+              TextButton(
+                onPressed: () {
+                  return Navigator.pop(fncCtx, 2);
+                },
+                child: const Text('Enabled'),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -67,11 +97,71 @@ class _DetailsPageState extends State<DetailsPage> {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: VerticalCard(
-                        countryRecord: snapshot.data,
-                      ),
+                    // child: SizedBox(
+                    //   width: MediaQuery.of(context).size.width * 0.4,
+                    //   child: VerticalCard(
+                    //     countryRecord: snapshot.data,
+                    //   ),
+                    // ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.blue,
+                            ),
+                            child: SizedBox(
+                              // width: MediaQuery.of(context).size.width * 0.4,
+                              child: VerticalCard(
+                                countryRecord: snapshot.data,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 3,
+                            child: Container(
+                              padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                              decoration: const BoxDecoration(
+                                color: Colors.cyan,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        // uncomment to understand async/await
+                                        // final cac =
+                                        //     await _dialogBuilder(context);
+                                        // log('cai nay chay truoc');
+                                        // log('cai nay chay sau $cac');
+
+                                        // Navigator
+                                        // - control flow
+                                        switch (await _dialogBuilder(context)) {
+                                          case 1:
+                                            log('pop tra ve 1');
+                                            break;
+                                          case 2:
+                                            log('pop tra ve 2');
+                                            break;
+                                          case null:
+                                            // dialog dismissed
+                                            log('pop tra ve null');
+                                            break;
+                                        }
+                                      },
+                                      child: const Text('Send data'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )),
+                      ],
                     ),
                   ),
                   Expanded(

@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 
-// TODO: create another search bar based on Huy's code `_searchBarKHANG` and see the diff
+// TODO: check on Huy's code `_searchBarKHANG` and see the diff
 class CustomSearchBar extends StatefulWidget {
   const CustomSearchBar({
     super.key,

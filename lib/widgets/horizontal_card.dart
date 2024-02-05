@@ -27,11 +27,9 @@ class HorizontalCard extends StatelessWidget {
       child: Card(
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          // TODO: move this to parent ?
-          // use async to perform actions after done naving
-          onTap: () async {
+          onTap: () {
             // 1. use simple example to understand nav first
-            // await Navigator.of(context).pushNamed(
+            // Navigator.of(context).pushNamed(
             //   '/test_details_example',
             //   arguments: {'accountName': 'Johnny', 'userId': '6969'},
             // );
@@ -41,7 +39,7 @@ class HorizontalCard extends StatelessWidget {
             // 2. then use this
             // reference https://docs.flutter.dev/cookbook/navigation/returning-data
             final fullUrl = 'https://restcountries.com/v3.1/name/$commonName';
-            await Navigator.of(context).push(
+            Navigator.of(context).push(
               MaterialPageRoute(
                   builder: (context) =>
                       DetailsPage(commonName: commonName, countryUrl: fullUrl)),
