@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:flutter_project005/widgets/customform.dart';
 import 'package:flutter_project005/models/slim_country.dart';
 import 'package:flutter_project005/widgets/vertical_card.dart';
 
@@ -48,27 +49,52 @@ class _DetailsPageState extends State<DetailsPage> {
   // - remember to handle null (user cancels the dialog (e.g. by hitting the back button on Android, or tapping on the mask behind the dialog))
   Future<int?> _dialogBuilder(BuildContext fncCtx) async {
     return await showDialog<int>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Basic dialog box.'),
-            content: const Text('good'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  return Navigator.pop(fncCtx, 1);
-                },
-                child: const Text('Disabled'),
+      context: context,
+      builder: (BuildContext context) {
+        // - very simple case
+        // return AlertDialog(
+        //   title: const Text('Basic dialog box.'),
+        //   content: const Text('good'),
+        //   actions: <Widget>[
+        //     TextButton(
+        //       onPressed: () {
+        //         return Navigator.pop(fncCtx, 1);
+        //       },
+        //       child: const Text('Disabled'),
+        //     ),
+        //     TextButton(
+        //       onPressed: () {
+        //         return Navigator.pop(fncCtx, 2);
+        //       },
+        //       child: const Text('Enabled'),
+        //     ),
+        //   ],
+        // );
+
+        // - more complex case
+        return SimpleDialog(
+          title: const Text('text'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          children: const <Widget>[
+            SizedBox(
+              width: 500,
+              height: 500,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CustomForm(),
+                  ],
+                ),
               ),
-              TextButton(
-                onPressed: () {
-                  return Navigator.pop(fncCtx, 2);
-                },
-                child: const Text('Enabled'),
-              ),
-            ],
-          );
-        });
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override
