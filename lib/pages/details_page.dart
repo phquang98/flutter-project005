@@ -20,6 +20,25 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   late Future<SlimCountry> countryData;
+  // NOTE: make this cleaner ?
+  late String nameForm;
+  late int ageForm;
+  late String countryForm;
+  late String genderForm;
+
+  // simulate response that will be rendered late after fetching
+  late Map<String, dynamic> lateData = {};
+
+  // NOTE: make this cleaner ?
+  void _updateFormData(String formDataOne, int formDataTwo,
+      String formDataThree, String formDataFour) {
+    setState(() {
+      nameForm = formDataOne;
+      ageForm = formDataTwo;
+      countryForm = formDataThree;
+      genderForm = formDataFour;
+    });
+  }
 
   Future<SlimCountry> fetchCountryDataByName() async {
     final response = await http.get(Uri.parse(widget.countryUrl));
@@ -29,7 +48,7 @@ class _DetailsPageState extends State<DetailsPage> {
         List<dynamic> tmpList = jsonDecode(response.body);
         // https://restcountries.com/v3.1/name/mali -> firstWhere, not first
         final data = SlimCountry.fromJson(tmpList.firstWhere((ele) {
-          // add another null check to not accessing undefined
+          // null check to not access undefined
           return (ele['name'] != null &&
               ele['name']['common'] == widget.commonName);
         }) as Map<String, dynamic>);
@@ -42,12 +61,58 @@ class _DetailsPageState extends State<DetailsPage> {
     }
   }
 
+  Future<dynamic> fakePost(String nameHere, int ageHere, String countryHere,
+      String genderHere) async {
+    final response = await http.post(
+      Uri.parse('https://jsonplaceholder.typicode.com/posts'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': nameHere,
+        'age': ageHere,
+        'country': countryHere,
+        'gender': genderHere,
+      }),
+    );
+
+    try {
+      if (response.statusCode == 201) {
+        var tmp = jsonDecode(response.body) as Map<String, dynamic>;
+        setState(() {
+          lateData = tmp;
+        });
+        // https://dart.dev/language/patterns#validating-incoming-json
+        if (tmp
+            case {
+              'id': int idFoo,
+              'name': String nameFoo,
+              'age': int ageFoo,
+              'country': String countryFoo,
+              'gender': String genderFoo,
+              // 'notExistKey': String,
+            }) {
+          log('A new way to null check + structure check + auto assign $idFoo $nameFoo $ageFoo $countryFoo $genderFoo');
+        } else {
+          log('A null value or structure does not match!');
+        }
+
+        return tmp;
+      } else {
+        throw Exception('Status code is not 200!');
+      }
+    } catch (e) {
+      throw Exception('Something wrong!');
+    }
+  }
+
   // Navigator
   // - initialized using a func like this (do explicit type arg, Dart type inference not as strong as TS)
   // - use Nav.pop()
   // - passed down to caller with async/await
-  // - remember to handle null (user cancels the dialog (e.g. by hitting the back button on Android, or tapping on the mask behind the dialog))
+  // - remember to handle null (user cancels the dialog (e.g. by hitting the back button on Android, or tapping on the space behind dialog))
   Future<int?> _dialogBuilder(BuildContext fncCtx) async {
+    // type arg is the return type inside Nav.pop() when closed (e.g. int)
     return await showDialog<int>(
       context: context,
       builder: (BuildContext context) {
@@ -77,16 +142,21 @@ class _DetailsPageState extends State<DetailsPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          children: const <Widget>[
+          children: <Widget>[
             SizedBox(
               width: 500,
               height: 500,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    CustomForm(),
+                    CustomForm(
+                      updateFormData: _updateFormData,
+                      closeFormHdlr: () {
+                        return Navigator.pop(fncCtx, 69);
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -155,16 +225,14 @@ class _DetailsPageState extends State<DetailsPage> {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     ElevatedButton(
                                       onPressed: () async {
-                                        // uncomment to understand async/await
                                         // final cac =
                                         //     await _dialogBuilder(context);
-                                        // log('cai nay chay truoc');
-                                        // log('cai nay chay sau $cac');
+                                        // log('data thay muon $cac');
 
                                         // Navigator
                                         // - control flow
@@ -179,10 +247,19 @@ class _DetailsPageState extends State<DetailsPage> {
                                             // dialog dismissed
                                             log('pop tra ve null');
                                             break;
+                                          default:
+                                            fakePost(nameForm, ageForm,
+                                                countryForm, genderForm);
+                                            break;
                                         }
                                       },
                                       child: const Text('Send data'),
                                     ),
+                                    // kinda cond rendering
+                                    lateData.containsKey('id')
+                                        ? Text(
+                                            'Data after click submit form: ${lateData.toString()}')
+                                        : Container(),
                                   ],
                                 ),
                               ),

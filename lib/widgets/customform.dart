@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomClearBtn extends StatelessWidget {
-  const CustomClearBtn({required this.controller});
+  const CustomClearBtn({super.key, required this.controller});
 
   final TextEditingController controller;
 
@@ -12,8 +12,19 @@ class CustomClearBtn extends StatelessWidget {
       );
 }
 
+// NOTE: Problem: get data when user clicks Btn, send data back to parent, then Nav.pop
+// Solution 1: pass data inside Nav.pop(ctx, dataHere)
+// Not possible, runs ok but slow by 1 rendered frame, probably caused by Nav.pop() is async
+// Solution 2: give setState to child, when onPress -> setState -> Nav.pop()
 class CustomForm extends StatefulWidget {
-  const CustomForm({super.key});
+  const CustomForm({
+    super.key,
+    required this.updateFormData,
+    required this.closeFormHdlr,
+  });
+
+  final Function(String, int, String, String) updateFormData;
+  final Function closeFormHdlr;
 
   @override
   State<CustomForm> createState() => _CustomFormState();
@@ -22,14 +33,19 @@ class CustomForm extends StatefulWidget {
 // TODO: test with VNese, and observe what is the request body
 // TODO: compare with Huy for reuse
 class _CustomFormState extends State<CustomForm> {
-  // Create a text controller and use it to retrieve the current value
-  // of the TextField.
-  final noobCtrl = TextEditingController();
+  // retrieve curr value of corresponding TextField
+  final ctrlOne = TextEditingController();
+  final ctrlTwo = TextEditingController();
+  final ctrlThree = TextEditingController();
+
+  String? curRadioValue = 'male';
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    noobCtrl.dispose();
+    ctrlOne.dispose();
+    ctrlTwo.dispose();
+    ctrlThree.dispose();
     super.dispose();
   }
 
@@ -37,13 +53,14 @@ class _CustomFormState extends State<CustomForm> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: TextField(
-            decoration: InputDecoration(
+            controller: ctrlOne,
+            decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
               // suffixIcon: CustomClearBtn(),
-              labelText: 'Filled',
+              labelText: 'Username',
               hintText: 'hint text',
               helperText: 'supporting text',
               filled: true,
@@ -57,26 +74,64 @@ class _CustomFormState extends State<CustomForm> {
               Flexible(
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Colors.cyan,
+                      // color: Colors.cyan,
+                      ),
+                  child: TextField(
+                    controller: ctrlTwo,
+                    decoration: const InputDecoration(
+                      labelText: 'Age',
+                    ),
                   ),
-                  child: const TextField(),
                 ),
               ),
               const SizedBox(width: 16),
               Flexible(
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Colors.cyan,
-                  ),
+                      // color: Colors.cyan,
+                      ),
                   child: TextField(
-                    controller: noobCtrl,
+                    controller: ctrlThree,
                     decoration: const InputDecoration(
                       border: null,
-                      hintText: 'cacacaca',
+                      labelText: 'Country',
+                      hintText: 'hint text',
                     ),
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              Flexible(
+                child: RadioListTile(
+                  title: const Text('Male'),
+                  value: 'male',
+                  groupValue: curRadioValue,
+                  onChanged: (value) {
+                    setState(() {
+                      curRadioValue = value;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 16),
+              Flexible(
+                child: RadioListTile(
+                  title: const Text('Female'),
+                  value: "female",
+                  groupValue: curRadioValue,
+                  onChanged: (value) {
+                    setState(() {
+                      curRadioValue = value;
+                    });
+                  },
+                ),
+              )
             ],
           ),
         ),
@@ -93,7 +148,18 @@ class _CustomFormState extends State<CustomForm> {
                       borderRadius: BorderRadius.circular(16.0),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    String foo = ctrlOne.text;
+                    int bar = int.tryParse(ctrlTwo.text) ?? -1;
+                    String baz = ctrlThree.text;
+
+                    // First return data to parent
+                    widget.updateFormData(foo, bar, baz,
+                        curRadioValue!.toString()); // TODO: no null assertions
+
+                    // Then disclose the widget
+                    widget.closeFormHdlr();
+                  },
                   child: const Text('Send'),
                 ),
               ),

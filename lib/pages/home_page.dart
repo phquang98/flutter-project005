@@ -112,52 +112,56 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                  // ListView must be under Expanded https://stackoverflow.com/a/57335217
-                  child: Container(
-                      // color: Colors.yellow,
-                      // NOTE: add type arg (even though it can be infer from FutureBuilder.future)
-                      child: FutureBuilder<List<SlimCountry>>(
-                future: dataFromFetchedBackend,
-                builder: (content, snapshot) {
-                  if (snapshot.hasData) {
-                    final shownData = snapshot.data?.where(
-                      (ele) {
-                        if (searchPhrase == '') {
-                          return true;
-                        } else {
-                          return ele.commonName
-                              .toLowerCase()
-                              .contains(searchPhrase.toLowerCase());
-                        }
-                      },
-                    ).toList();
+                // ListView must be under Expanded https://stackoverflow.com/a/57335217
+                child: Container(
+                    // color: Colors.yellow,
+                    // NOTE: add type arg (even though it can be infer from FutureBuilder.future)
+                    child: FutureBuilder<List<SlimCountry>>(
+                  future: dataFromFetchedBackend,
+                  builder: (content, snapshot) {
+                    if (snapshot.hasData) {
+                      // NOTE: put filter logic inside render func, not called from outside (caused delayed result)
+                      // ini filtered data for user view here (!== unfiltered fetched data)
+                      final shownData = snapshot.data?.where(
+                        (ele) {
+                          if (searchPhrase == '') {
+                            return true;
+                          } else {
+                            return ele.commonName
+                                .toLowerCase()
+                                .contains(searchPhrase.toLowerCase());
+                          }
+                        },
+                      ).toList();
 
-                    // log('Redraw! With searchPhrase=$searchPhrase');
-                    // log('Redraw! With shownData=${shownData?.length}');
+                      // log('Redraw! With searchPhrase=$searchPhrase');
+                      // log('Redraw! With shownData=${shownData?.length}');
 
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: shownData?.length,
-                      // NOTE: notice the null aware ops
-                      itemBuilder: (context, index) {
-                        return HorizontalCard(
-                          id: index,
-                          commonName: shownData?[index].commonName ?? 'Loading',
-                          officialName:
-                              shownData?[index].officialName ?? 'Loading',
-                          area: shownData?[index].area ?? 0,
-                          population: shownData?[index].population ?? 0,
-                          flagUrl: shownData?[index].flagUrl ?? '',
-                        );
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: shownData?.length,
+                        // NOTE: notice the null aware ops
+                        itemBuilder: (context, index) {
+                          return HorizontalCard(
+                            id: index,
+                            commonName:
+                                shownData?[index].commonName ?? 'Loading',
+                            officialName:
+                                shownData?[index].officialName ?? 'Loading',
+                            area: shownData?[index].area ?? 0,
+                            population: shownData?[index].population ?? 0,
+                            flagUrl: shownData?[index].flagUrl ?? '',
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
 
-                  return const CircularProgressIndicator();
-                },
-              )))
+                    return const CircularProgressIndicator();
+                  },
+                )),
+              )
             ],
           )),
     );
