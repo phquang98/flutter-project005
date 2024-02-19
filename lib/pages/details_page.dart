@@ -256,10 +256,21 @@ class _DetailsPageState extends State<DetailsPage> {
                                       child: const Text('Send data'),
                                     ),
                                     // kinda cond rendering
-                                    lateData.containsKey('id')
-                                        ? Text(
-                                            'Data after click submit form: ${lateData.toString()}')
-                                        : Container(),
+                                    () {
+                                      if (lateData
+                                          case {
+                                            'id': int idFoo,
+                                            'name': String nameFoo,
+                                            'age': int ageFoo,
+                                            'country': String countryFoo,
+                                            'gender': String genderFoo,
+                                          }) {
+                                        return Text(
+                                            'Data from backend: { id: $idFoo, name: $nameFoo, etc }');
+                                      } else {
+                                        return Container();
+                                      }
+                                    }(),
                                   ],
                                 ),
                               ),
