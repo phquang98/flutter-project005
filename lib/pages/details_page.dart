@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_project005/widgets/customform.dart';
 import 'package:flutter_project005/models/slim_country.dart';
@@ -106,6 +107,31 @@ class _DetailsPageState extends State<DetailsPage> {
     }
   }
 
+  // use when needed simple and perminent data
+  Future<void> setDefaultLateData() async {
+    // Load and obtain the shared preferences for this app.
+    final prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getInt('id') == null) {
+      log('shared_preferences empty, populating ...');
+      await prefs.setInt('id', 100);
+      await prefs.setString('name', 'Default from shared_preferences');
+      await prefs.setInt('age', 69);
+      await prefs.setString('country', 'Antartica');
+      await prefs.setString('gender', 'Others');
+    }
+
+    setState(() {
+      lateData.addAll({
+        'id': prefs.getInt('id'),
+        'name': prefs.getString('name'),
+        'age': prefs.getInt('age'),
+        'country': prefs.getString('country'),
+        'gender': prefs.getString('gender'),
+      });
+    });
+  }
+
   // Navigator
   // - initialized using a func like this (do explicit type arg, Dart type inference not as strong as TS)
   // - use Nav.pop()
@@ -171,6 +197,7 @@ class _DetailsPageState extends State<DetailsPage> {
   void initState() {
     super.initState();
     countryData = fetchCountryDataByName();
+    setDefaultLateData();
   }
 
   // TODO: viet bua cac data linh tinh vao trong future builder de test, sau do so sanh voi cach anh Huy viet future builder ntn
@@ -266,7 +293,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                             'gender': String genderFoo,
                                           }) {
                                         return Text(
-                                            'Data from backend: { id: $idFoo, name: $nameFoo, etc }');
+                                            'Data from backend: { id: $idFoo, name: $nameFoo, age: $ageFoo, country: $countryFoo, gender: $genderFoo }');
                                       } else {
                                         return Container();
                                       }
