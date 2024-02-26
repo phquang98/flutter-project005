@@ -1,8 +1,8 @@
-// NOTE: all new page should be created like this
 import 'package:flutter/material.dart';
 
-import 'package:flutter_project005/widgets/drawer.dart';
+import 'package:flutter_project005/widgets/index.dart';
 
+// NOTE: all new page should be created like this
 class TemplatePage extends StatefulWidget {
   const TemplatePage({super.key});
 

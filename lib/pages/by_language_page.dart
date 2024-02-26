@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_project005/widgets/drawer.dart';
+import 'package:flutter_project005/widgets/index.dart';
 
 class ByLanguagePage extends StatefulWidget {
   const ByLanguagePage({super.key, required this.appBarText});

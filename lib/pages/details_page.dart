@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:flutter_project005/widgets/customform.dart';
 import 'package:flutter_project005/models/slim_country.dart';
-import 'package:flutter_project005/widgets/vertical_card.dart';
+import 'package:flutter_project005/widgets/index.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage(

@@ -3,10 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:flutter_project005/widgets/drawer.dart';
-import 'package:flutter_project005/widgets/search_bar.dart';
 import 'package:flutter_project005/models/slim_country.dart';
-import 'package:flutter_project005/widgets/horizontal_card.dart';
+import 'package:flutter_project005/widgets/index.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.appBarText});
